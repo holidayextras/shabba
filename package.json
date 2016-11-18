@@ -1,0 +1,31 @@
+{
+  "name": "shabba",
+  "version": "0.0.1",
+  "description": "Shared split testing",
+  "main": "src/shabba.js",
+  "scripts": {
+    "lint": "make-up src test",
+    "test": "npm run lint && npm run test:coverage",
+    "test:coverage": "istanbul cover _mocha",
+    "posttest": "istanbul check-coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holidayextras/shabba.git"
+  },
+  "author": "Holiday Extras",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/holidayextras/shabba/issues"
+  },
+  "homepage": "https://github.com/holidayextras/shabba#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "dirty-chai": "^1.2.2",
+    "istanbul": "^0.4.5",
+    "make-up": "^9.3.1",
+    "mocha": "^3.1.2",
+    "sinon": "^1.17.6",
+    "sinon-chai": "^2.8.0"
+  }
+}

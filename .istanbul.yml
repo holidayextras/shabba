@@ -1,0 +1,9 @@
+instrumentation:
+  include-all-sources: true
+  excludes: ['controllers/ordersOld/**']
+check:
+  global:
+    statements: 63
+    lines: 63
+    branches: 52
+    functions: 63
