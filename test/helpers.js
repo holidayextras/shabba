@@ -1,11 +1,11 @@
-'use strict';
+'use strict'
 
-var chai = require('chai');
+var chai = require('chai')
 
-chai.config.includeStack = true;
+chai.config.includeStack = true
 
-chai.use(require('dirty-chai'));
-chai.use(require('sinon-chai'));
+chai.use(require('dirty-chai'))
+chai.use(require('sinon-chai'))
 
-global.expect = chai.expect;
-global.should = chai.should();
+global.expect = chai.expect
+global.should = chai.should()
