@@ -28,6 +28,7 @@ const Shabba = module.exports = function (name, options) {
       this.variant(variantName, {weight: this.options.variants[variantName]})
     }
   }
+  console.log('shabba(', name, ')')
   return this
 }
 
@@ -55,6 +56,7 @@ Shabba._singleton = function (name, options) {
 }
 
 Shabba.prototype.variant = function (name, options) {
+  console.log('called prototype variant', this.name, name)
   if (typeof name !== 'string') {
     if (process.env.NODE_ENV !== 'production') {
       throw new Error('Variant name required')
@@ -67,11 +69,12 @@ Shabba.prototype.variant = function (name, options) {
   return this
 }
 
-Shabba.start = function (name, options) {
-  return this._singleton(name, options).start()
+Shabba.control = function (name, options) {
+  return this._singleton(name).control()
 }
 
 Shabba.prototype.start = function () {
+  console.log('called prototype start', this.name)
   if (!this.variants.length) {
     if (process.env.NODE_ENV !== 'production') {
       console.warn(this.name, 'has no variants', this)
@@ -111,13 +114,20 @@ Shabba.prototype.start = function () {
   return this
 }
 
+Shabba.start = function (name, options) {
+  return this._singleton(name, options).start()
+}
+
 Shabba.prototype.control = function (name, options) {
-  if (process.env.NODE_ENV !== 'production') {
+  /* if (process.env.NODE_ENV !== 'production') {
     console.log('control() is depracated')
-  }
-  // if (!name) name = 'Control'
+  } */
   options.control = true
   return this.variant(name, options)
+}
+
+Shabba.control = function (name, options) {
+  return this._singleton(name).control()
 }
 
 Shabba.prototype.complete = function () {
@@ -168,8 +178,6 @@ Shabba.prototype.getVariantCookie = function () {
   return cookie.get(this.cookieName())
 }
 
-Shabba.prototype.value = Shabba.prototype.getVariantCookie
-
 Shabba.prototype.setVariantCookie = function (value) {
   return this.setCookie(this.cookieName(), value, {
     expires: this.options.expires
@@ -210,6 +218,21 @@ Shabba.prototype.is = function (value) {
   return this.getVariantCookie() === value
 }
 
+// to be removed?
+
+Shabba.test = Shabba._singleton
+Shabba.prototype.value = Shabba.prototype.getVariantCookie
+
+Shabba.value = function (name) {
+  if (process.env.NODE_ENV !== 'production') {
+    console.warn('shabba.value is depracated, unneccessary extra weight!')
+  }
+  return this._singleton(name).value()
+}
+
 Shabba.prototype.isnt = function (value) {
-  return this.getVariantCookie() !== value
+  if (process.env.NODE_ENV !== 'production') {
+    console.warn('shabba.isnt is depracated, unneccessary extra weight!')
+  }
+  return !this.is(value)
 }
