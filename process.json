@@ -1,0 +1,9 @@
+{
+  "name": "node-cluster",
+  "script": "./src/server.js",
+  "node_args": "--optimize_for_size --max-old-space-size=205 --gc_interval=100",
+  "instances": 1,
+  "exec_mode": "cluster",
+  "kill_timeout": "8000",
+  "restart_delay": "2000"
+}

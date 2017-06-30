@@ -1,0 +1,7 @@
+#!/bin/bash
+set -e
+
+export TW_PRODUCTION_BRANCH="master"
+export TW_STAGING_BRANCH="staging"
+export TW_RELEASE_BRANCH="staging"
+export TW_CI_PROVIDER="travis"

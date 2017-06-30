@@ -1,0 +1,34 @@
+{
+  "name": "shabba",
+  "owner": "payment-platform",
+  "scripts": {
+    "start": "nodemon --config ./nodemon.json --watch . src/server.js",
+    "coverage": "nyc mocha && nyc check-coverage",
+    "lint": "eslint . --quiet && echo '✔ All good!'",
+    "test": "npm run lint && npm run coverage"
+  },
+  "config": {
+    "port": 13000,
+    "services": []
+  },
+  "dependencies": {
+    "node-toolbox": "github:holidayextras/node-toolbox",
+    "nodemon": "1.11.0",
+    "renovate": "github:holidayextras/renovate",
+    "tupperware": "github:holidayextras/tupperware"
+  },
+  "devDependencies": {
+    "chai": "4.0.2",
+    "chai-as-promised": "7.0.0",
+    "dirty-chai": "2.0.0",
+    "eslint": "4.1.1",
+    "eslint-config-standard": "10.2.1",
+    "eslint-plugin-import": "2.6.1",
+    "eslint-plugin-node": "5.1.0",
+    "eslint-plugin-promise": "3.5.0",
+    "eslint-plugin-standard": "3.0.1",
+    "mocha": "3.4.2",
+    "nyc": "11.0.3",
+    "sinon-chai": "2.11.0"
+  }
+}
