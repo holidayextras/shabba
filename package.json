@@ -18,17 +18,17 @@
     "tupperware": "github:holidayextras/tupperware"
   },
   "devDependencies": {
-    "chai": "4.0.2",
-    "chai-as-promised": "7.0.0",
+    "chai": "4.1.0",
+    "chai-as-promised": "7.1.1",
     "dirty-chai": "2.0.1",
-    "eslint": "4.1.1",
+    "eslint": "4.2.0",
     "eslint-config-standard": "10.2.1",
-    "eslint-plugin-import": "2.6.1",
+    "eslint-plugin-import": "2.7.0",
     "eslint-plugin-node": "5.1.1",
     "eslint-plugin-promise": "3.5.0",
     "eslint-plugin-standard": "3.0.1",
     "mocha": "3.4.2",
-    "nyc": "11.0.3",
-    "sinon-chai": "2.11.0"
+    "nyc": "11.1.0",
+    "sinon-chai": "2.12.0"
   }
 }
