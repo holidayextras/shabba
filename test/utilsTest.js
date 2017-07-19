@@ -88,29 +88,3 @@ describe('utils', function () {
     })
   })
 })
-
-/*
-
-utils.cookie = (experiment, value, req, res) => {
-  const name = utils.cookieName(experiment)
-  if (utils.isAlternative(value)) {
-    value = value + '_' + experiment.percentage
-  }
-  // remove the subdomain if there is one
-  const domain = ('' + req.host).replace(/^.*?\./, '.')
-  const options = { domain }
-  res.cookie(name, value)
-  return { name, value, options }
-}
-
-utils.setVariant = ok => ok ? 'show_alternative' : 'show_original'
-
-utils.isAlternative = value => /show_alternative/.test(value)
-
-utils.randomResponse = experiment => {
-  const randomNumber = Math.random() * 100
-  return {
-    ok: randomNumber < experiment.percentage,
-    reason: 'compared random number ' + randomNumber + ' with split % ' + experiment.percentage
-  }
-} */

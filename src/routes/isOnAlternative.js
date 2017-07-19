@@ -19,21 +19,16 @@ isOnAlternative.handler = (req, res) => {
   if (experiment.percentage >= 100) {
     return res.json({
       reason: 'test is ON, so out of your show_original bucket...',
-      ok: false
+      ok: true
     })
   }
 
-  const cookieName = utils.cookieName(experiment)
-  if (req.cookies[cookieName]) {
-    return res.json({
-      reason: 'already had cookie ' + cookieName + ' set to ' + req.cookies[cookieName],
-      ok: utils.isAlternative(req.cookies[cookieName])
-    })
-  }
+  const bucketReason = utils.getBucketReason(req.cookies, experiment)
+  if (bucketReason) return res.json(bucketReason)
 
   let response = utils.randomResponse(experiment)
-  const variant = utils.setVariant(response.ok)
-  response.cookie = utils.cookie(experiment, variant, req, res)
+  const variant = utils.variantName(response.ok)
+  response.cookie = utils.addToBucket(experiment, variant, req, res)
   response.track = utils.track(experiment, variant, 'start')
   res.json(response)
 }

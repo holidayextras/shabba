@@ -36,7 +36,7 @@ utils.cookieName = experiment => {
   return encodeURIComponent(experiment.name + ' (' + process.env.NODE_ENV + ')')
 }
 
-utils.cookie = (experiment, value, req, res) => {
+utils.addToBucket = (experiment, value, req, res) => {
   const name = utils.cookieName(experiment)
   if (utils.isAlternative(value)) {
     value = value + '_' + experiment.percentage
@@ -48,7 +48,7 @@ utils.cookie = (experiment, value, req, res) => {
   return { name, value, options }
 }
 
-utils.setVariant = ok => ok ? 'show_alternative' : 'show_original'
+utils.variantName = ok => ok ? 'show_alternative' : 'show_original'
 
 utils.isAlternative = value => /show_alternative/.test(value)
 
@@ -57,5 +57,16 @@ utils.randomResponse = experiment => {
   return {
     ok: randomNumber < experiment.percentage,
     reason: 'compared random number ' + randomNumber + ' with split % ' + experiment.percentage
+  }
+}
+
+// right now read a cookie
+// in future identify this user and look up in data somwhere
+utils.getBucketReason = (cookies, experiment) => {
+  const cookieName = utils.cookieName(experiment)
+  if (!cookies[cookieName]) return false
+  return {
+    reason: 'already bucketed (cookie ' + cookieName + ' set to ' + cookies[cookieName] + ')',
+    ok: utils.isAlternative(cookies[cookieName])
   }
 }
