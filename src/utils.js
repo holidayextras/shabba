@@ -1,9 +1,18 @@
+const dataPlatform = require('node-toolbox').dataPlatform
+
 const utils = module.exports = {}
 
-utils.track = (experiment = {}, variant = '', step = 'start') => {
-  // cannot actually call tracker here, we could call orion directly though...
-  // tracker.track('test', { step, test_name, variant, proportion })
-  return { step, test_name: experiment.name, variant, percentage: '' + experiment.percentage }
+utils.track = (experiment = {}, variant = '', step = 'start', ctx) => {
+  // cannot call tracker server side, we can only call orion directly...
+  // node-toolbox provides a helper
+  const payload = {
+    step,
+    test_name: experiment.name,
+    variant,
+    percentage: '' + experiment.percentage
+  }
+  dataPlatform.publish(ctx, 'test', payload)
+  return payload
 }
 
 utils.reasonToSkipExperiment = (experiment, params) => {
@@ -36,7 +45,17 @@ utils.cookieName = experiment => {
   return encodeURIComponent(experiment.name + ' (' + process.env.NODE_ENV + ')')
 }
 
-utils.addToBucket = (experiment, value, req, res) => {
+utils.removeFromBucket = (experiment = {}, req, res) => {
+  const name = utils.cookieName(experiment)
+  // remove the subdomain if there is one
+  const domain = ('' + req.host).replace(/^.*?\./, '.')
+  const expires = -1
+  const options = { domain, expires }
+  res.cookie(name, null)
+  return { name, options }
+}
+
+utils.addToBucket = (experiment = {}, value, req, res) => {
   const name = utils.cookieName(experiment)
   if (utils.isAlternative(value)) {
     value = value + '_' + experiment.percentage
@@ -52,7 +71,7 @@ utils.variantName = ok => ok ? 'show_alternative' : 'show_original'
 
 utils.isAlternative = value => /show_alternative/.test(value)
 
-utils.randomResponse = experiment => {
+utils.randomResponse = (experiment = {}) => {
   const randomNumber = Math.random() * 100
   return {
     ok: randomNumber < experiment.percentage,
@@ -62,11 +81,18 @@ utils.randomResponse = experiment => {
 
 // right now read a cookie
 // in future identify this user and look up in data somwhere
-utils.getBucketReason = (cookies, experiment) => {
+utils.getBucketReason = (req = {}, experiment = {}) => {
+  if (experiment.percentage >= 100) {
+    return {
+      reason: 'test is ON, so out of your show_original bucket...',
+      ok: true
+    }
+  }
   const cookieName = utils.cookieName(experiment)
-  if (!cookies[cookieName]) return false
+  if (!req.cookies) return false
+  if (!req.cookies[cookieName]) return false
   return {
-    reason: 'already bucketed (cookie ' + cookieName + ' set to ' + cookies[cookieName] + ')',
-    ok: utils.isAlternative(cookies[cookieName])
+    reason: 'already bucketed (cookie ' + cookieName + ' set to ' + req.cookies[cookieName] + ')',
+    ok: utils.isAlternative(req.cookies[cookieName])
   }
 }

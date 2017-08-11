@@ -6,6 +6,9 @@ const isOnAlternative = module.exports = {
   path: '/isOnAlternative/:name'
 }
 
+// no reason to actually return json obj here,
+// leaving it here while debugging though
+// thinking of just returning status codes
 isOnAlternative.handler = (req, res) => {
   const experiment = splitTests[req.params.name]
   const reasonToSkipExperiment = utils.reasonToSkipExperiment(experiment, req.query)
@@ -16,19 +19,12 @@ isOnAlternative.handler = (req, res) => {
     })
   }
 
-  if (experiment.percentage >= 100) {
-    return res.json({
-      reason: 'test is ON, so out of your show_original bucket...',
-      ok: true
-    })
-  }
-
-  const bucketReason = utils.getBucketReason(req.cookies, experiment)
+  const bucketReason = utils.getBucketReason(req, experiment)
   if (bucketReason) return res.json(bucketReason)
 
   let response = utils.randomResponse(experiment)
   const variant = utils.variantName(response.ok)
-  response.cookie = utils.addToBucket(experiment, variant, req, res)
-  response.track = utils.track(experiment, variant, 'start')
+  utils.addToBucket(experiment, variant, req, res)
+  utils.track(experiment, variant, 'start', req.getContext())
   res.json(response)
 }

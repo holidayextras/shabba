@@ -9,9 +9,11 @@ describe('isOnAlternative', function () {
   let res = null
 
   beforeEach(function () {
+    sandbox.stub(utils, 'track')
     splitTests.dummyTest = {
     }
     req = {
+      getContext: sandbox.stub().returns('CONTEXT'),
       cookies: {
       },
       params: {
@@ -96,8 +98,6 @@ describe('isOnAlternative', function () {
           it('renders some json indicating if we are in the experiment or not', function () {
             const expected = {
               reason: sandbox.match.any, // reason is probably only staying while developing...
-              cookie: sandbox.match.object, // undecided, probably not staying
-              track: sandbox.match.object, // probably not staying
               ok: sandbox.match.bool
             }
             expect(res.json).to.have.been.calledOnce()

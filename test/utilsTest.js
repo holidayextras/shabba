@@ -1,6 +1,7 @@
 const sinon = require('sinon')
 const sandbox = sinon.sandbox.create()
 const utils = require('../src/utils')
+const dataPlatform = require('node-toolbox').dataPlatform
 
 describe('utils', function () {
   let env = null
@@ -15,11 +16,28 @@ describe('utils', function () {
   })
 
   describe('track', function () {
-    /* it('actually does some tracking', function () {
-      // can't call tracker server side, still to figure this out...
-      expect(tracker.track).to.have.been.calledOnce()
-        .and.calledWithExactly('something here')
-    }) */
+    beforeEach(function () {
+      sandbox.stub(dataPlatform, 'publish')
+      const context = {
+        foo: 'bar'
+      }
+      const experiment = {
+        name: 'foo',
+        percentage: 66
+      }
+      utils.track(experiment, 'VARIANT', 'STEP', context)
+    })
+
+    it('actually does some tracking', function () {
+      const expected = {
+        step: 'STEP',
+        test_name: 'foo',
+        variant: 'VARIANT',
+        percentage: '66'
+      }
+      expect(dataPlatform.publish).to.have.been.calledOnce()
+        .and.calledWithExactly({ foo: 'bar' }, 'test', expected)
+    })
 
     it('returns an object so we can handle the tracking externally', function () {
       expect(utils.track()).to.be.an('object')
