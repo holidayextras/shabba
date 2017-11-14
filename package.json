@@ -12,9 +12,11 @@
     "services": []
   },
   "dependencies": {
+    "cookie-parser": "1.4.3",
     "node-toolbox": "github:holidayextras/node-toolbox",
     "nodemon": "1.11.0",
     "renovate": "github:holidayextras/renovate",
+    "require-all": "2.2.0",
     "tupperware": "github:holidayextras/tupperware"
   },
   "devDependencies": {
