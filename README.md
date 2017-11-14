@@ -6,6 +6,16 @@ Shared ab/ba split testing, for all of our platforms
 
 We have some design notes in the wiki, see https://github.com/holidayextras/shabba/wiki/Proof-of-concept
 
-All code in https://github.com/holidayextras/shabba/tree/project-lounge right now.
+## example usage
+
+```
+npm install
+dockyard-local start
+
+http://localhost:8080/shabba/isOnAlternative/pay_537_de_payframe?lang=de
+http://localhost:8080/shabba/isOnAlternative/pay_537_de_payframe?lang=en
+```
+delete your cookies and try again
+
 
 https://shabba.dock-yard.io/status
